@@ -23,6 +23,10 @@ h1 {
     font-weight: 400;
 }
 
+h2 {
+    text-align: center;
+}
+
 .container {
     background-color: #fff;
     padding: 20px;
@@ -32,16 +36,15 @@ h1 {
 
 .div-tarefas {
     background-color: #e4e4e4;
+    width: 400px;
     padding: 65px;
     margin-top: 20px;
     border-radius: 20px;
 }
 
-
-
 input[type="text"] {
     width: 200px;
-    padding: 8px 16px;
+    padding: 10px 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
@@ -50,7 +53,7 @@ button {
     background-color: var(--cor-botão-azul);
     color: #fff;
     border: none;
-    padding: 8px 16px;
+    padding: 10px 16px;
     border-radius: 4px;
     cursor: pointer;
 }
@@ -66,12 +69,18 @@ button {
     cursor: pointer;
 }
 
+.form-finalizado {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+
 ul {
     list-style-type: none;
     padding: 0;
 }
 
-li {
+.item-da-lista {
     display: flex;
     justify-content: space-between;
     align-items: center;

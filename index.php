@@ -20,11 +20,32 @@ if (isset($_POST['task_name'])) {
     $conn->query($sql);
 }
 
-// Função para exibir a lista de tarefas
+// Função para excluir uma tarefa
 if (isset($_GET['delete'])) {
     $taskId = $_GET['delete'];
     $deleteSql = "DELETE FROM tasks WHERE id = $taskId";
     $conn->query($deleteSql);
+}
+
+// Função para excluir todas as tarefas
+if (isset($_POST['delete_all'])) {
+    $deleteAllSql = "DELETE FROM tasks";
+    $conn->query($deleteAllSql);
+}
+
+// Função para buscar uma tarefa por ID
+function getTaskById($conn, $taskId) {
+    $sql = "SELECT * FROM tasks WHERE id = $taskId";
+    $result = $conn->query($sql);
+    return $result->fetch_assoc();
+}
+
+// Função para atualizar uma tarefa
+if (isset($_POST['update_task'])) {
+    $taskId = $_POST['task_id'];
+    $updatedTaskName = $_POST['updated_task_name'];
+    $updateSql = "UPDATE tasks SET task_name = '$updatedTaskName' WHERE id = $taskId";
+    $conn->query($updateSql);
 }
 
 $sql = "SELECT * FROM tasks ORDER BY created_at DESC";
@@ -44,23 +65,51 @@ $result = $conn->query($sql);
     <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 
+<body>
     <h1>Lista de Tarefas</h1>
     <form method="POST">
         <input type="text" name="task_name" placeholder="Digite uma nova tarefa" required>
         <button type="submit">Adicionar</button>
     </form>
     
+    
     <div class="div-tarefas">
         <h2>Tarefas:</h2>
         <ul>
             <?php while($row = $result->fetch_assoc()): ?>
                 <li>
-                    <?php echo $row['task_name']; ?>
-                    <a class="finalizado" href="?delete=<?php echo $row['id']; ?>">Excluir</a>
+                    <div class="item-da-lista">
+                        <?php echo $row['task_name']; ?>
+                        <div>
+                            <a class="editar" href="#" onclick="editTask(<?php echo $row['id']; ?>, '<?php echo $row['task_name']; ?>')">Editar</a>
+                            <a class="finalizado" href="?delete=<?php echo $row['id']; ?>">Excluir</a>
+                        </div>
+                    </div>
+                    <div id="edit-form" style="display:none;">
+                        <p>Editar Tarefa:</p>
+                        <form method="POST">
+                            <input type="hidden" id="edit-task-id" name="task_id">
+                            <input type="text" id="edit-task-name" name="updated_task_name" required>
+                            <button type="submit" name="update_task">Salvar</button>
+                        </form>
+                    </div>
                 </li>
             <?php endwhile; ?>
         </ul>
+        <form method="POST" class="form-finalizado">
+            <button type="submit" name="delete_all">Apagar todas as tarefas</button>
+        </form>
     </div>
+    
+
+    
+    <script>
+        function editTask(id, name) {
+            document.getElementById("edit-task-id").value = id;
+            document.getElementById("edit-task-name").value = name;
+            document.getElementById("edit-form").style.display = "block";
+        }
+    </script>
     
     <?php $conn->close(); ?>
 </body>
